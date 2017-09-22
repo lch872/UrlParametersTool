@@ -1,0 +1,14 @@
+[
+    {
+        "key":"uri6.com",
+        "name":"热云",
+        "arg":{
+            "clickid":"{TID}",
+            "tid":"{TID}",
+            "idfa":"{s1}",
+            "imei":"{s1}",
+            "ip":"{ip}",
+            "callback_url":"http%3a%2f%2ftracking.xxxx.mobi%2fpb%3ftid%3d{TID}"
+            }
+    }
+]
