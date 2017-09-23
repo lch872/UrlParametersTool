@@ -1,14 +1,21 @@
-[
-    {
-        "key":"uri6.com",
-        "name":"热云",
-        "arg":{
-            "clickid":"{TID}",
-            "tid":"{TID}",
-            "idfa":"{s1}",
-            "imei":"{s1}",
-            "ip":"{ip}",
-            "callback_url":"http%3a%2f%2ftracking.xxxx.mobi%2fpb%3ftid%3d{TID}"
+{
+    "source":{
+        "version":"1.0",
+        "url":"http://git.oneway.mobi/XXXXXX/list.json",
+        "feature":" 1.判断素材是否可用 2.判断素材是否过期 3.判断是否需要下载"
+    },
+    "data":[
+        {
+            "key":"uri6.com",
+            "name":"热云",
+            "arg":{
+                "clickid":"{TID}",
+                "tid":"{TID}",
+                "idfa":"{s1}",
+                "imei":"{s1}",
+                "ip":"{ip}",
+                "callback_url":"http%3a%2f%2ftracking.xxxx.mobi%2fpb%3ftid%3d{TID}"
             }
-    }
-]
+        }
+    ]
+}
