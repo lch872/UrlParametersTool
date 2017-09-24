@@ -14,15 +14,14 @@ def getUrls(text):
     return re.findall("(?isu)(https?\://[a-zA-Z0-9\-\.\?/&\=\:{!@#$_^*(+)%}]+)", text)
 
 # 从一条url中获取参数值
-
 def getArgDict(url):
     argDict = {}
+
     # 链接取值
     if len(url.split("?")) > 1 :
         arg_array = url.split("?")[1].split("&")
         for arg in arg_array:
             argDict[arg.split("=")[0]] = arg.split("=")[1]
-        return url.split("?")[0], argDict
 
     return url.split("?")[0], argDict
 
@@ -31,8 +30,8 @@ def apendArg(arg_dict):
 
     new_string = ""
 
-    for key in arg_dict:
-        new_string = new_string + "&" + key+"="+arg_dict[key]
+    for key,value in arg_dict.iteritems():
+        new_string = new_string + "&" + key + "=" + value
 
     return new_string[1:]
 
@@ -49,20 +48,22 @@ def makeUrl(url):
             (domain_url, arg_dict) = getArgDict(url)
 
             # 修改链接参数
-            for ss in item["arg"]:
+            for key,value in item["arg"].iteritems():
 
-                if item["arg"][ss].startswith('+'):
-                    arg_dict[ss] = arg_dict[ss].split("{")[0] + item["arg"][ss].split("+")[1]
+                if value.startswith('+'):
+                    arg_dict[key] = arg_dict[key].split("{")[0] + value.split("+")[1]
                     continue
 
-                arg_dict[ss] = item["arg"][ss]
+                arg_dict[key] = value
 
             return domain_url + "?" + apendArg(arg_dict)
 
 
 # 修改文本中的链接
 def replaceUrl(text):
+
     urls = getUrls(text)
+
     # 生成新连接
     for url in urls:
         new_url = makeUrl(url)
@@ -71,17 +72,22 @@ def replaceUrl(text):
             raise NameError('Cannot find advertiser')
 
         text = text.replace(url, new_url.encode("utf-8")+"\n")
+        
     return text
 
 # 版本升级
 def checkUpdata(current):
-    if float(json_list["source"]['version']) > float(current):
-        text = "最新版本: %s ,当前版本: %s ,请升级!\nfeature: %s \n下载链接: %s"%(json_list["source"]['version'],currentVersion,json_list["source"]['feature'],json_list["source"]['url'])
-        return text
+    ver = json_list["source"]
+    
+    if float(ver['version']) > float(current):
+
+        return "最新版本: %s ,当前版本: %s ,请升级!\nfeature: %s \n下载链接: %s"\
+               %(ver['version'],currentVersion,ver['feature'],ver['url'])
+
     return "当前已经是最新版本"
 
 currentVersion = "1.0"
-root = Tk(className='preferences replace tool v%s'%currentVersion)
+root = Tk(className='preferences replace v%s'%currentVersion)
 
 power = Label(root, text='Power by Da.Lan', font = 'Helvetica -10', anchor = 'e',width=115).pack()
 
@@ -93,11 +99,11 @@ outputText.pack()
 
 def buttonDidClick():
     input_text = inputText.get('1.0', END)
-    
+
     try:
         output_text = replaceUrl(input_text)
-    except Exception,msg:
-        output_text = "Error :" + msg.message
+    except Exception,ex:
+        output_text = "Error :" + ex.message
 
     # 清空并替换文本
     outputText.delete("1.0", END)
@@ -105,7 +111,7 @@ def buttonDidClick():
 
 button = Button(root, text='Make URL', command=buttonDidClick).pack(fill=BOTH)
 
-dataU = requests.get('https://raw.githubusercontent.com/lch872/UrlParametersTool/master/list.json')
+dataU = requests.get('http://git.oway.mobi/chenhao/TrackingTool/raw/master/list.json')
 json_list = dataU.json()
 outputText.insert(INSERT, checkUpdata(currentVersion))
 
